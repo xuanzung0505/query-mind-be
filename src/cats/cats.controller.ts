@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  Body,
   Controller,
   Get,
   Header,
@@ -8,19 +10,23 @@ import {
   Query,
   Redirect,
 } from '@nestjs/common';
+import { CreateCatDto } from './dto/create-cat.dto';
+import { CatsService } from './cats.service';
 
 @Controller('cats')
 export class CatsController {
+  constructor(private catsService: CatsService) {}
+
   @Post()
   @HttpCode(204)
   @Header('Cache-Control', 'no-store')
-  create(): string {
-    return 'This action adds a new cat';
+  create(@Body() createCatDto: CreateCatDto) {
+    return this.catsService.create(createCatDto);
   }
 
   @Get()
-  findAll(): string {
-    return 'This action returns all cats';
+  findAll(@Query('age') age: number, @Query('breed') breed: string) {
+    return this.catsService.findAll();
   }
 
   @Get(':id')
