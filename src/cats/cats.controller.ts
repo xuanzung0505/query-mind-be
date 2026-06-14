@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
+import { Public } from 'src/auth/skipAuth';
 
 @Controller('cats')
 export class CatsController {
@@ -33,10 +34,10 @@ export class CatsController {
   findOne(@Param() params: { id: string }): string {
     return `This action returns a #${params.id} cat`;
   }
-
+  @Public()
   @Get('docs')
   @Redirect('https://docs.nestjs.com', 302)
-  getDocs(@Query('version') version) {
+  getDocs(@Query('version') version: string) {
     if (version && version === '5') {
       return { url: 'https://docs.nestjs.com/v5/' };
     }
